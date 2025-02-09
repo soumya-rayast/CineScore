@@ -1,5 +1,6 @@
 import Results from "@/components/Results";
 
+
 export default async function SearchPage({ params }) {
   const { searchTerm } = await params;
   const res = await fetch(

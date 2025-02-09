@@ -6,9 +6,13 @@ export const createOrUpdateUser = async (
 ) => {
     try {
         await connect();
+        if (!email_addresses || !Array.isArray(email_addresses) || email_addresses.length === 0) {
+            throw new Error("Invalid email_addresses array");
+        }
         const user = await User.findOneAndUpdate({ clerkId: id },
             {
                 $set: {
+                    clerkId: id,
                     firstName: first_name,
                     lastName: last_name,
                     profilePicture: image_url,
@@ -26,7 +30,11 @@ export const createOrUpdateUser = async (
 export const deleteUser = async (id) => {
     try {
         await connect();
-        await User.findOneAndDelete({ clerkId: id })
+        const deletedUser = await User.findOneAndDelete({ clerkId: id });
+        if (!deletedUser) {
+            throw new Error("User not found");
+        }
+        return { message: "User deleted successfully", deletedUser };
     } catch (error) {
         console.log("Error: Could not delete user :", error)
     }

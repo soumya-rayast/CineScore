@@ -8,6 +8,7 @@ const favSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
+        trim: true,
     },
     description: {
         type: String,
@@ -20,6 +21,8 @@ const favSchema = new mongoose.Schema({
     rating: {
         type: Number,
         required: true,
+        min: 0,
+        max: 10
     },
     image: {
         type: String,
@@ -33,18 +36,24 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
             unique: true,
+            trim: true,
         },
         email: {
             type: String,
-            required: true
+            required: true,
+            unique: true, // Ensuring uniqueness
+            lowercase: true, // Store emails in lowercase
+            trim: true,
         },
         firstName: {
             type: String,
-            required: true
+            required: true,
+            trim: true,
         },
         lastName: {
             type: String,
             required: true,
+            trim: true,
         },
         profilePicture: {
             type: String,
@@ -52,7 +61,7 @@ const userSchema = new mongoose.Schema(
         },
         favs: {
             type: [favSchema],
-            default: []
+            default: () => []
         }
     },
     { timestamps: true }
